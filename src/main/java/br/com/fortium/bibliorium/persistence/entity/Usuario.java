@@ -18,7 +18,7 @@ import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
 
 
 @Entity
-@Table(name="usuario")
+@Table(schema="bibliorium", name="usuario")
 public class Usuario implements Serializable {
 	
 	private static final long serialVersionUID = -9117872512921595056L;
@@ -38,7 +38,7 @@ public class Usuario implements Serializable {
 	}
 
 	@Id
-	@SequenceGenerator(name="usuarioIdSEQ", sequenceName="usuario_id_seq")
+	@SequenceGenerator(name="usuarioIdSEQ", sequenceName="usuario_id_seq", initialValue = 1 , allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="usuarioIdSEQ")
 	@Column(name = "id_usuario")
 	private Long id;

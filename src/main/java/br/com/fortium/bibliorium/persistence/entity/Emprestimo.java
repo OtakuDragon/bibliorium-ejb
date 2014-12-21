@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo;
 
 @Entity
-@Table(name = "emprestimo")
+@Table(schema="bibliorium", name = "emprestimo")
 public class Emprestimo implements Serializable {
 
 	private static final long serialVersionUID = -6434682029164398820L;
@@ -38,7 +38,7 @@ public class Emprestimo implements Serializable {
 	}
 	
 	@Id
-	@SequenceGenerator(name="emprestimoIdSEQ", sequenceName="id_emprestimo_seq")
+	@SequenceGenerator(name="emprestimoIdSEQ", sequenceName="id_emprestimo_seq", initialValue = 1 , allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="emprestimoIdSEQ")
 	@Column(name = "id_emprestimo")
 	private Long id;

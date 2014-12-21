@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="categoria")
+@Table(schema="bibliorium", name="categoria")
 public class Categoria implements Serializable {
 
 	private static final long serialVersionUID = -6980134754724153507L;

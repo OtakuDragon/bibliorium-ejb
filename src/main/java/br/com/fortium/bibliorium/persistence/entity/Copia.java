@@ -17,7 +17,7 @@ import javax.persistence.Table;
 import br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia;
 
 @Entity
-@Table(name = "copia")
+@Table(schema="bibliorium", name = "copia")
 public class Copia implements Serializable {
 	
 	private static final long serialVersionUID = -2935125477803111512L;
@@ -30,7 +30,7 @@ public class Copia implements Serializable {
 	}
 
 	@Id
-	@SequenceGenerator(name="copiaIdSEQ", sequenceName="id_copia_seq")
+	@SequenceGenerator(name="copiaIdSEQ", sequenceName="id_copia_seq",initialValue = 1 , allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="copiaIdSEQ")
 	@Column(name = "id_copia")
 	private Long id;

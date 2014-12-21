@@ -14,7 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "livro")
+@Table(schema="bibliorium", name = "livro")
 public class Livro implements Serializable {
 
 	private static final long serialVersionUID = 6095294978884506986L;
@@ -33,7 +33,7 @@ public class Livro implements Serializable {
 	}
 
 	@Id
-	@SequenceGenerator(name="livroIdSEQ", sequenceName="id_livro_seq")
+	@SequenceGenerator(name="livroIdSEQ", sequenceName="id_livro_seq", initialValue = 1 , allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="livroIdSEQ")
 	@Column(name = "id_livro")
 	private Long id;
