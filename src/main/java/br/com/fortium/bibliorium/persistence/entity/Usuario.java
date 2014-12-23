@@ -10,17 +10,25 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import br.com.fortium.bibliorium.persistence.enumeration.EstadoUsuario;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
 
-
+@NamedQueries({
+@NamedQuery(
+name =  Usuario.AUTENTICA_USUARIO_QUERY,
+query = "SELECT u.tipo FROM Usuario u WHERE u.cpf = :cpf AND  u.senha = :senha"
+)})
 @Entity
 @Table(schema="bibliorium", name="usuario")
 public class Usuario implements Serializable {
 	
+	public static transient final String AUTENTICADO = "autenticado";
+	public static transient final String AUTENTICA_USUARIO_QUERY = "autenticaUsuario";
 	private static final long serialVersionUID = -9117872512921595056L;
 
 	public Usuario(){}
