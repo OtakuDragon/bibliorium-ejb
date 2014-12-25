@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo;
 
@@ -53,12 +55,17 @@ public class Emprestimo implements Serializable {
 	private Copia copia;
 	
 	@Column(name = "data_emprestimo", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataEmprestimo;
 	
+	
 	@Column(name = "data_devolucao")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataDevolucao;
 	
+	
 	@Column(name = "data_fechamento")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataFechamento;
 	
 	@Column(name = "valor_multa")
@@ -69,6 +76,7 @@ public class Emprestimo implements Serializable {
 	private TipoEmprestimo tipo;
 	
 	@Column(name = "data_renovacao")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataRenovacao;
 
 	public Long getId() {

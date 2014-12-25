@@ -14,6 +14,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import br.com.fortium.bibliorium.persistence.enumeration.EstadoUsuario;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
@@ -46,7 +48,7 @@ public class Usuario implements Serializable {
 	}
 
 	@Id
-	@SequenceGenerator(name="usuarioIdSEQ", sequenceName="usuario_id_seq", initialValue = 1 , allocationSize = 1)
+	@SequenceGenerator(name="usuarioIdSEQ", sequenceName="id_usuario_seq", initialValue = 1 , allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="usuarioIdSEQ")
 	@Column(name = "id_usuario")
 	private Long id;
@@ -75,6 +77,7 @@ public class Usuario implements Serializable {
 	private String telefone;
 	
 	@Column(name = "data_cadastro", nullable = false)
+	@Temporal(TemporalType.DATE)
 	private Date dataCadastro;
 	
 	@Column(name = "rg", nullable = false, length = 20, unique = true)

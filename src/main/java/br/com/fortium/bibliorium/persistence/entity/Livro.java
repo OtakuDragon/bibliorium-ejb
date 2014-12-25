@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(schema="bibliorium", name = "livro")
@@ -49,6 +51,7 @@ public class Livro implements Serializable {
 	private String nome;
 	
 	@Column(name = "data_cadastro", nullable = false)
+	@Temporal(TemporalType.DATE)
 	private Date dataCadastro;
 	
 	@Column(name = "edicao", nullable = false)

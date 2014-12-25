@@ -5,18 +5,19 @@
         version="2.0">
     <persistence-unit name="biblioriumPU">
     	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-<!-- 	<jta-data-source>java:jboss/datasources/BiblioriumDS</jta-data-source>  -->
-		<jta-data-source>java:jboss/datasources/H2DS</jta-data-source> 
+		<jta-data-source>java:jboss/datasources/BiblioriumDS</jta-data-source> 
+<!-- 	<jta-data-source>java:jboss/datasources/H2DS</jta-data-source>  -->
 		<class>br.com.fortium.bibliorium.persistence.entity.Categoria</class>
 		<class>br.com.fortium.bibliorium.persistence.entity.Copia</class>
 		<class>br.com.fortium.bibliorium.persistence.entity.Emprestimo</class>
 		<class>br.com.fortium.bibliorium.persistence.entity.Livro</class>
 		<class>br.com.fortium.bibliorium.persistence.entity.Usuario</class>
 		<properties> 
-			<property name = "hibernate.dialect" value = "org.hibernate.dialect.H2Dialect"/>
+<!-- 		<property name = "hibernate.dialect" value = "org.hibernate.dialect.H2Dialect"/> -->
+			<property name = "hibernate.dialect" value = "org.hibernate.dialect.PostgreSQLDialect"/>
 			<property name = "hibernate.show_sql" value = "true"/>
 			<property name = "hibernate.format_sql" value = "true"/>
-			<property name = "hibernate.hbm2ddl.auto" value = "create-drop"/>
+<!-- 		<property name = "hibernate.hbm2ddl.auto" value = "create-drop"/> -->
 		</properties>
     </persistence-unit>
 </persistence>
