@@ -5,11 +5,10 @@ import javax.ejb.Stateless;
 
 import br.com.fortium.bibliorium.persistence.eao.UsuarioEAO;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
-import br.com.fortium.bibliorium.service.Service;
 import br.com.fortium.bibliorium.service.UsuarioService;
 
 @Stateless
-public class UsuarioServiceImpl extends Service implements UsuarioService {
+public class UsuarioServiceImpl extends ServiceImpl implements UsuarioService {
 
 	@EJB
 	UsuarioEAO usuarioEAO;
