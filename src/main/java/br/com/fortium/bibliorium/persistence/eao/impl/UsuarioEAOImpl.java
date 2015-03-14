@@ -4,13 +4,12 @@ import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import br.com.fortium.bibliorium.persistence.eao.EAO;
 import br.com.fortium.bibliorium.persistence.eao.UsuarioEAO;
 import br.com.fortium.bibliorium.persistence.entity.Usuario;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
 
 @Stateless
-public class UsuarioEAOImpl extends EAO implements UsuarioEAO {
+public class UsuarioEAOImpl extends EAOImpl<Usuario> implements UsuarioEAO {
 
 	@Override
 	public TipoUsuario autenticarUsuario(String cpf, String senha) {
@@ -22,5 +21,10 @@ public class UsuarioEAOImpl extends EAO implements UsuarioEAO {
 		}catch(NoResultException e){
 			return null;
 		}
+	}
+
+	@Override
+	protected Class<Usuario> getEntityClass() {
+		return Usuario.class;
 	}
 }
