@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import br.com.fortium.bibliorium.persistence.eao.CategoriaEAO;
 import br.com.fortium.bibliorium.persistence.entity.Categoria;
@@ -16,6 +18,7 @@ public class CategoriaServiceImpl extends ServiceImpl implements CategoriaServic
 	private CategoriaEAO categoriaEAO;
 
 	@Override
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public List<Categoria> buscarCategorias() {
 		return categoriaEAO.list();
 	}
