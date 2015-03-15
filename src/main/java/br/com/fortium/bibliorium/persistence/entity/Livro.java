@@ -21,12 +21,14 @@ public class Livro implements Serializable {
 
 	private static final long serialVersionUID = 6095294978884506986L;
 
-	public Livro(){}
+	public Livro(){
+		categoria = new Categoria();
+	}
 	
-	public Livro(Categoria categoria, String isbn, String nome, Date dataCadastro, Character edicao, String autores, String editora, Integer numPaginas) {
+	public Livro(Categoria categoria, String isbn, String titulo, Date dataCadastro, String edicao, String autores, String editora, String numPaginas) {
 		setCategoria(categoria);
 		setIsbn(isbn);
-		setNome(nome);
+		setTitulo(titulo);
 		setDataCadastro(new Date());
 		setEdicao(edicao);
 		setAutores(autores);
@@ -47,15 +49,15 @@ public class Livro implements Serializable {
 	@Column(name = "isbn", nullable = false, unique = true, length = 13)
 	private String isbn;
 	
-	@Column(name = "nome", nullable = false, length = 255)
-	private String nome;
+	@Column(name = "titulo", nullable = false, length = 255)
+	private String titulo;
 	
 	@Column(name = "data_cadastro", nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dataCadastro;
 	
-	@Column(name = "edicao", nullable = false)
-	private Character edicao;
+	@Column(name = "edicao", nullable = false, length = 10)
+	private String edicao;
 	
 	@Column(name = "autores", nullable = false, length = 300)
 	private String autores;
@@ -90,12 +92,12 @@ public class Livro implements Serializable {
 		this.isbn = isbn;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getTitulo() {
+		return titulo;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 
 	public Date getDataCadastro() {
@@ -106,11 +108,11 @@ public class Livro implements Serializable {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Character getEdicao() {
+	public String getEdicao() {
 		return edicao;
 	}
 
-	public void setEdicao(Character edicao) {
+	public void setEdicao(String edicao) {
 		this.edicao = edicao;
 	}
 
@@ -130,12 +132,12 @@ public class Livro implements Serializable {
 		this.editora = editora;
 	}
 
-	public int getNumPaginas() {
-		return numPaginas;
+	public String getNumPaginas() {
+		return numPaginas == null ? null : String.valueOf(numPaginas);
 	}
-
-	public void setNumPaginas(int numPaginas) {
-		this.numPaginas = numPaginas;
+	
+	public void setNumPaginas(String numPaginas) {
+		this.numPaginas = Integer.parseInt(numPaginas);
 	}
 
 	@Override
@@ -147,12 +149,13 @@ public class Livro implements Serializable {
 				+ ((categoria == null) ? 0 : categoria.hashCode());
 		result = prime * result
 				+ ((dataCadastro == null) ? 0 : dataCadastro.hashCode());
-		result = prime * result + edicao;
+		result = prime * result + ((edicao == null) ? 0 : edicao.hashCode());
 		result = prime * result + ((editora == null) ? 0 : editora.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + numPaginas;
+		result = prime * result
+				+ ((numPaginas == null) ? 0 : numPaginas.hashCode());
+		result = prime * result + ((titulo == null) ? 0 : titulo.hashCode());
 		return result;
 	}
 
@@ -189,7 +192,11 @@ public class Livro implements Serializable {
 		} else if (!dataCadastro.equals(other.dataCadastro)) {
 			return false;
 		}
-		if (edicao != other.edicao) {
+		if (edicao == null) {
+			if (other.edicao != null) {
+				return false;
+			}
+		} else if (!edicao.equals(other.edicao)) {
 			return false;
 		}
 		if (editora == null) {
@@ -199,7 +206,11 @@ public class Livro implements Serializable {
 		} else if (!editora.equals(other.editora)) {
 			return false;
 		}
-		if (id != other.id) {
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
 		}
 		if (isbn == null) {
@@ -209,14 +220,18 @@ public class Livro implements Serializable {
 		} else if (!isbn.equals(other.isbn)) {
 			return false;
 		}
-		if (nome == null) {
-			if (other.nome != null) {
+		if (numPaginas == null) {
+			if (other.numPaginas != null) {
 				return false;
 			}
-		} else if (!nome.equals(other.nome)) {
+		} else if (!numPaginas.equals(other.numPaginas)) {
 			return false;
 		}
-		if (numPaginas != other.numPaginas) {
+		if (titulo == null) {
+			if (other.titulo != null) {
+				return false;
+			}
+		} else if (!titulo.equals(other.titulo)) {
 			return false;
 		}
 		return true;
