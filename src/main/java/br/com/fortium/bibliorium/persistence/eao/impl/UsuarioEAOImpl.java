@@ -9,7 +9,7 @@ import br.com.fortium.bibliorium.persistence.entity.Usuario;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
 
 @Stateless
-public class UsuarioEAOImpl extends EAOImpl<Usuario> implements UsuarioEAO {
+public class UsuarioEAOImpl extends EAOImpl<Usuario, Long> implements UsuarioEAO {
 
 	@Override
 	public TipoUsuario autenticarUsuario(String cpf, String senha) {

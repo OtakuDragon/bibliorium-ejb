@@ -2,6 +2,7 @@ package br.com.fortium.bibliorium.persistence.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -35,7 +36,7 @@ public class Copia implements Serializable {
 	@Column(name = "id_copia")
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="id_livro", nullable = false) 
 	private Livro livro;
 	

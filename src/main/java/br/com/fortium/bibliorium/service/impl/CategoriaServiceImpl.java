@@ -23,4 +23,17 @@ public class CategoriaServiceImpl extends ServiceImpl implements CategoriaServic
 		return categoriaEAO.list();
 	}
 
+	@Override
+	public Categoria buscar(String id) {
+		Integer idInt;
+		
+		try{
+			idInt = Integer.parseInt(id);
+		}catch(NumberFormatException e){
+			throw new IllegalArgumentException("O id deve representar um número.");
+		}
+		
+		return categoriaEAO.buscar(idInt);
+	}
+
 }

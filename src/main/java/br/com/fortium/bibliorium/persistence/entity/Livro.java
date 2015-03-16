@@ -21,11 +21,12 @@ public class Livro implements Serializable {
 
 	private static final long serialVersionUID = 6095294978884506986L;
 
+
 	public Livro(){
-		categoria = new Categoria();
+		setCategoria(new Categoria());
 	}
 	
-	public Livro(Categoria categoria, String isbn, String titulo, Date dataCadastro, String edicao, String autores, String editora, String numPaginas) {
+	public Livro(Categoria categoria, String isbn, String titulo, Date dataCadastro, String edicao, String autores, String editora, Integer numPaginas) {
 		setCategoria(categoria);
 		setIsbn(isbn);
 		setTitulo(titulo);
@@ -67,6 +68,9 @@ public class Livro implements Serializable {
 
 	@Column(name = "num_paginas", nullable = false)
 	private Integer numPaginas;
+	
+	@Column(name = "nome_foto", nullable = false)
+	private String nomeFoto;
 
 	public Long getId() {
 		return id;
@@ -132,12 +136,12 @@ public class Livro implements Serializable {
 		this.editora = editora;
 	}
 
-	public String getNumPaginas() {
-		return numPaginas == null ? null : String.valueOf(numPaginas);
+	public Integer getNumPaginas() {
+		return numPaginas;
 	}
 	
-	public void setNumPaginas(String numPaginas) {
-		this.numPaginas = Integer.parseInt(numPaginas);
+	public void setNumPaginas(Integer numPaginas) {
+		this.numPaginas = numPaginas;
 	}
 
 	@Override
@@ -235,5 +239,13 @@ public class Livro implements Serializable {
 			return false;
 		}
 		return true;
+	}
+
+	public String getNomeFoto() {
+		return nomeFoto;
+	}
+
+	public void setNomeFoto(String nomeFoto) {
+		this.nomeFoto = nomeFoto;
 	}
 }

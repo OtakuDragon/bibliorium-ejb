@@ -6,7 +6,7 @@ import br.com.fortium.bibliorium.persistence.eao.CategoriaEAO;
 import br.com.fortium.bibliorium.persistence.entity.Categoria;
 
 @Stateless
-public class CategoriaEAOImpl extends EAOImpl<Categoria> implements CategoriaEAO {
+public class CategoriaEAOImpl extends EAOImpl<Categoria, Integer> implements CategoriaEAO {
 
 	@Override
 	protected Class<Categoria> getEntityClass() {

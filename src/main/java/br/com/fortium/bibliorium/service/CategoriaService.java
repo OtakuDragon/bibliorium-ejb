@@ -6,4 +6,5 @@ import br.com.fortium.bibliorium.persistence.entity.Categoria;
 
 public interface CategoriaService extends Service {
 	List<Categoria> buscarCategorias();
+	Categoria buscar(String id);
 }
