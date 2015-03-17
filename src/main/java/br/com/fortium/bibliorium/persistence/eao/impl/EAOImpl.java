@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -43,18 +44,34 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	@SuppressWarnings("unchecked")
 	public List<T> buscar(String jpql, Object[] parametros) {
 		Query query = getEntityManager().createQuery(jpql);
+		setParametros(query, parametros);
 		
-		for (int i = 1; i < parametros.length; i++) {
-			query.setParameter(i, parametros[i]);
+		return (List<T>)query.getResultList();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public T buscarUm(String jpql, Object[] parametros) {
+		Query query = getEntityManager().createQuery(jpql);
+		setParametros(query, parametros);
+		
+		return (T)query.getSingleResult();
+	}
+	
+	@Override
+	public boolean exists(String jpql, Object[] parametros){
+		try{
+			buscarUm(jpql, parametros);
+			return Boolean.TRUE;
+		}catch(NoResultException e){
+			return Boolean.FALSE;
 		}
-		
-		return query.getResultList();
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public T buscar(ID id) {
-		String jpql = "FROM "+entityClass.getSimpleName()+" entity WHERE entity."+idName+" = ?";
+		String jpql = "FROM "+entityClass.getSimpleName()+" entity WHERE entity."+idName+" = ?1";
 		Query query = getEntityManager().createQuery(jpql);
 		query.setParameter(1, id);
 		return (T) query.getSingleResult();
@@ -74,5 +91,13 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 				break;
 			}
 		}
+	}
+	
+	private Query setParametros(Query query, Object[] parametros){
+		for (int i = 0; i < parametros.length; i++) {
+			query.setParameter(i+1, parametros[i]);
+		}
+		
+		return query;
 	}
 }

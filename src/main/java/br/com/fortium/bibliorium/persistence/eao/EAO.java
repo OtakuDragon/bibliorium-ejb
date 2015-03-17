@@ -10,4 +10,6 @@ public interface EAO<T,ID> {
 	List<T> buscar(String jpql, Object[] parametros);
 	T buscar(ID id);
 	void save(T entity);
+	T buscarUm(String jpql, Object[] parametros);
+	boolean exists(String jpql, Object[] parametros);
 }

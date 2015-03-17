@@ -21,7 +21,6 @@ public class Livro implements Serializable {
 
 	private static final long serialVersionUID = 6095294978884506986L;
 
-
 	public Livro(){
 		setCategoria(new Categoria());
 	}
@@ -68,9 +67,6 @@ public class Livro implements Serializable {
 
 	@Column(name = "num_paginas", nullable = false)
 	private Integer numPaginas;
-	
-	@Column(name = "nome_foto", nullable = false)
-	private String nomeFoto;
 
 	public Long getId() {
 		return id;
@@ -239,13 +235,5 @@ public class Livro implements Serializable {
 			return false;
 		}
 		return true;
-	}
-
-	public String getNomeFoto() {
-		return nomeFoto;
-	}
-
-	public void setNomeFoto(String nomeFoto) {
-		this.nomeFoto = nomeFoto;
 	}
 }
