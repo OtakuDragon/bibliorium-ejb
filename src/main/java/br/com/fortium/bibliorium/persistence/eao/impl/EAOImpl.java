@@ -42,7 +42,7 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<T> buscar(String jpql, Object[] parametros) {
+	public List<T> buscar(String jpql, Object... parametros) {
 		Query query = getEntityManager().createQuery(jpql);
 		setParametros(query, parametros);
 		
@@ -51,7 +51,7 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public T buscarUm(String jpql, Object[] parametros) {
+	public T buscarUm(String jpql, Object... parametros) {
 		Query query = getEntityManager().createQuery(jpql);
 		setParametros(query, parametros);
 		
@@ -59,7 +59,7 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	}
 	
 	@Override
-	public boolean exists(String jpql, Object[] parametros){
+	public boolean exists(String jpql, Object... parametros){
 		try{
 			buscarUm(jpql, parametros);
 			return Boolean.TRUE;

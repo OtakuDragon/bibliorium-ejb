@@ -11,6 +11,5 @@ public class CopiaEAOImpl extends EAOImpl<Copia, Long> implements CopiaEAO {
 	protected Class<Copia> getEntityClass() {
 		return Copia.class;
 	}
-
-
+	
 }

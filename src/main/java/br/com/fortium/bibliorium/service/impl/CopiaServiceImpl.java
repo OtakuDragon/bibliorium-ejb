@@ -25,4 +25,9 @@ public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 			copiaEAO.save(copia);
 		}
 	}
+
+	@Override
+	public List<Copia> list() {
+		return copiaEAO.list();
+	}
 }

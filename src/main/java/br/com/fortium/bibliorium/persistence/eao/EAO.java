@@ -6,10 +6,10 @@ import javax.persistence.EntityManager;
 
 public interface EAO<T,ID> {
 	EntityManager getEntityManager();
-	List<T> list();
-	List<T> buscar(String jpql, Object[] parametros);
-	T buscar(ID id);
 	void save(T entity);
-	T buscarUm(String jpql, Object[] parametros);
-	boolean exists(String jpql, Object[] parametros);
+	List<T> list();
+	T buscar(ID id);
+	List<T> buscar(String jpql, Object... parametros);
+	T buscarUm(String jpql, Object... parametros);
+	boolean exists(String jpql, Object... parametros);
 }

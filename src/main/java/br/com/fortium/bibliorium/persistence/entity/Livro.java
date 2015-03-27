@@ -1,19 +1,28 @@
 package br.com.fortium.bibliorium.persistence.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import br.com.fortium.bibliorium.util.FiltroCopia;
+
+import com.google.common.collect.Collections2;
 
 @Entity
 @Table(schema="bibliorium", name = "livro")
@@ -45,6 +54,9 @@ public class Livro implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="id_categoria", nullable = false)
 	private Categoria categoria;
+	
+	@OneToMany(mappedBy="livro", fetch=FetchType.EAGER)
+	private List<Copia> copias;
 	
 	@Column(name = "isbn", nullable = false, unique = true, length = 13)
 	private String isbn;
@@ -127,6 +139,16 @@ public class Livro implements Serializable {
 	public String getEditora() {
 		return editora;
 	}
+	
+	public List<Copia> getCopiasDisponiveis(){
+		Collection<Copia> copiasDisponiveis = Collections2.filter(getCopias(), FiltroCopia.DISPONIVEL);
+		return new ArrayList<Copia>(copiasDisponiveis);
+	}
+	
+	public List<Copia> getCopiasIndisponiveis(){
+		Collection<Copia> copiasIndisponiveis = Collections2.filter(getCopias(), FiltroCopia.INDISPONIVEL);
+		return new ArrayList<Copia>(copiasIndisponiveis);
+	}
 
 	public void setEditora(String editora) {
 		this.editora = editora;
@@ -140,6 +162,14 @@ public class Livro implements Serializable {
 		this.numPaginas = numPaginas;
 	}
 
+	public List<Copia> getCopias() {
+		return copias;
+	}
+
+	public void setCopias(List<Copia> copias) {
+		this.copias = copias;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -147,6 +177,7 @@ public class Livro implements Serializable {
 		result = prime * result + ((autores == null) ? 0 : autores.hashCode());
 		result = prime * result
 				+ ((categoria == null) ? 0 : categoria.hashCode());
+		result = prime * result + ((copias == null) ? 0 : copias.hashCode());
 		result = prime * result
 				+ ((dataCadastro == null) ? 0 : dataCadastro.hashCode());
 		result = prime * result + ((edicao == null) ? 0 : edicao.hashCode());
@@ -161,79 +192,63 @@ public class Livro implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		Livro other = (Livro) obj;
 		if (autores == null) {
-			if (other.autores != null) {
+			if (other.autores != null)
 				return false;
-			}
-		} else if (!autores.equals(other.autores)) {
+		} else if (!autores.equals(other.autores))
 			return false;
-		}
 		if (categoria == null) {
-			if (other.categoria != null) {
+			if (other.categoria != null)
 				return false;
-			}
-		} else if (!categoria.equals(other.categoria)) {
+		} else if (!categoria.equals(other.categoria))
 			return false;
-		}
+		if (copias == null) {
+			if (other.copias != null)
+				return false;
+		} else if (!copias.equals(other.copias))
+			return false;
 		if (dataCadastro == null) {
-			if (other.dataCadastro != null) {
+			if (other.dataCadastro != null)
 				return false;
-			}
-		} else if (!dataCadastro.equals(other.dataCadastro)) {
+		} else if (!dataCadastro.equals(other.dataCadastro))
 			return false;
-		}
 		if (edicao == null) {
-			if (other.edicao != null) {
+			if (other.edicao != null)
 				return false;
-			}
-		} else if (!edicao.equals(other.edicao)) {
+		} else if (!edicao.equals(other.edicao))
 			return false;
-		}
 		if (editora == null) {
-			if (other.editora != null) {
+			if (other.editora != null)
 				return false;
-			}
-		} else if (!editora.equals(other.editora)) {
+		} else if (!editora.equals(other.editora))
 			return false;
-		}
 		if (id == null) {
-			if (other.id != null) {
+			if (other.id != null)
 				return false;
-			}
-		} else if (!id.equals(other.id)) {
+		} else if (!id.equals(other.id))
 			return false;
-		}
 		if (isbn == null) {
-			if (other.isbn != null) {
+			if (other.isbn != null)
 				return false;
-			}
-		} else if (!isbn.equals(other.isbn)) {
+		} else if (!isbn.equals(other.isbn))
 			return false;
-		}
 		if (numPaginas == null) {
-			if (other.numPaginas != null) {
+			if (other.numPaginas != null)
 				return false;
-			}
-		} else if (!numPaginas.equals(other.numPaginas)) {
+		} else if (!numPaginas.equals(other.numPaginas))
 			return false;
-		}
 		if (titulo == null) {
-			if (other.titulo != null) {
+			if (other.titulo != null)
 				return false;
-			}
-		} else if (!titulo.equals(other.titulo)) {
+		} else if (!titulo.equals(other.titulo))
 			return false;
-		}
 		return true;
 	}
 }
