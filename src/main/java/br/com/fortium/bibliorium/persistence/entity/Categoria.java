@@ -16,23 +16,23 @@ public class Categoria implements Serializable {
 	public Categoria(){}
 	
 	public Categoria(Integer id, String nome){
-		setIdCategoria(id);
+		setId(id);
 		setNome(nome);
 	}
 	
 	@Id
 	@Column(name = "id_categoria")
-	private Integer idCategoria;
+	private Integer id;
 	
 	@Column(name = "nome", unique = true, nullable = false, length = 50)
 	private String nome;
 
-	public Integer getIdCategoria() {
-		return idCategoria;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdCategoria(Integer idCategoria) {
-		this.idCategoria = idCategoria;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getNome() {
@@ -47,7 +47,7 @@ public class Categoria implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + idCategoria;
+		result = prime * result + id;
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
@@ -64,7 +64,7 @@ public class Categoria implements Serializable {
 			return false;
 		}
 		Categoria other = (Categoria) obj;
-		if (idCategoria != other.idCategoria) {
+		if (id != other.id) {
 			return false;
 		}
 		if (nome == null) {

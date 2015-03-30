@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,7 +27,7 @@ import com.google.common.collect.Collections2;
 
 @Entity
 @Table(schema="bibliorium", name = "livro")
-public class Livro implements Serializable {
+public class Livro implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 6095294978884506986L;
 
@@ -55,7 +56,7 @@ public class Livro implements Serializable {
 	@JoinColumn(name="id_categoria", nullable = false)
 	private Categoria categoria;
 	
-	@OneToMany(mappedBy="livro", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="livro", fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
 	private List<Copia> copias;
 	
 	@Column(name = "isbn", nullable = false, unique = true, length = 13)
@@ -79,7 +80,22 @@ public class Livro implements Serializable {
 
 	@Column(name = "num_paginas", nullable = false)
 	private Integer numPaginas;
-
+	
+	public List<Copia> getCopiasDisponiveis(){
+		Collection<Copia> copiasDisponiveis = Collections2.filter(getCopias(), FiltroCopia.DISPONIVEL);
+		return new ArrayList<Copia>(copiasDisponiveis);
+	}
+	
+	public List<Copia> getCopiasIndisponiveis(){
+		Collection<Copia> copiasIndisponiveis = Collections2.filter(getCopias(), FiltroCopia.INDISPONIVEL);
+		return new ArrayList<Copia>(copiasIndisponiveis);
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -138,16 +154,6 @@ public class Livro implements Serializable {
 
 	public String getEditora() {
 		return editora;
-	}
-	
-	public List<Copia> getCopiasDisponiveis(){
-		Collection<Copia> copiasDisponiveis = Collections2.filter(getCopias(), FiltroCopia.DISPONIVEL);
-		return new ArrayList<Copia>(copiasDisponiveis);
-	}
-	
-	public List<Copia> getCopiasIndisponiveis(){
-		Collection<Copia> copiasIndisponiveis = Collections2.filter(getCopias(), FiltroCopia.INDISPONIVEL);
-		return new ArrayList<Copia>(copiasIndisponiveis);
 	}
 
 	public void setEditora(String editora) {

@@ -12,4 +12,6 @@ public interface EAO<T,ID> {
 	List<T> buscar(String jpql, Object... parametros);
 	T buscarUm(String jpql, Object... parametros);
 	boolean exists(String jpql, Object... parametros);
+	T update(T entity);
+	void delete(T entity);
 }

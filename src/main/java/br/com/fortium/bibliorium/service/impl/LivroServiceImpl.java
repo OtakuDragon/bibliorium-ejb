@@ -15,7 +15,7 @@ import br.com.fortium.bibliorium.service.LivroService;
 public class LivroServiceImpl extends ServiceImpl implements LivroService {
 
 	@EJB
-	LivroEAO livroEAO;
+	private LivroEAO livroEAO;
 	
 	@Override
 	public boolean isIsbnCadastrado(String isbn) {
@@ -28,6 +28,21 @@ public class LivroServiceImpl extends ServiceImpl implements LivroService {
 	@Override
 	public List<Livro> list() {
 		return livroEAO.list();
+	}
+
+	@Override
+	public void update(Livro livro) {
+		livroEAO.update(livro);
+	}
+
+	@Override
+	public void delete(Livro livro) {
+		livroEAO.delete(livro);
+	}
+
+	@Override
+	public List<Livro> buscarPorFiltro(Livro filtro) {
+		return livroEAO.buscarPorFiltro(filtro);
 	}
 
 }

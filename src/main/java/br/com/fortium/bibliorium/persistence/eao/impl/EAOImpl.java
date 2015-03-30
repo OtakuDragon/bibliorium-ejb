@@ -82,6 +82,16 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 		getEntityManager().persist(entity);
 	};
 	
+	@Override
+	public T update(T entity){
+		return getEntityManager().merge(entity);
+	}
+	
+	@Override
+	public void delete(T entity){
+		getEntityManager().remove(update(entity));
+	}
+	
 	protected abstract Class<T> getEntityClass();
 
 	private void setIdName(Class<T> clazz){
