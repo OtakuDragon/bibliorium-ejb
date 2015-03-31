@@ -35,7 +35,7 @@ public class Usuario implements Serializable {
 
 	public Usuario(){}
 	
-	public Usuario(String nome, Integer matricula, String cpf, TipoUsuario tipo, String email, EstadoUsuario estado, String telefone, Date dataCadastro, String rg) {
+	public Usuario(String nome, String matricula, String cpf, TipoUsuario tipo, String email, EstadoUsuario estado, String telefone, Date dataCadastro, String rg) {
 		setNome(nome);
 		setMatricula(matricula);
 		setCpf(cpf);
@@ -57,7 +57,7 @@ public class Usuario implements Serializable {
 	private String nome;
 	
 	@Column(name = "matricula", nullable = true)
-	private Integer matricula;
+	private String matricula;
 	
 	@Column(name = "cpf", nullable = false, unique = true, length = 11)
 	private String cpf;
@@ -80,7 +80,7 @@ public class Usuario implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date dataCadastro;
 	
-	@Column(name = "rg", nullable = false, length = 20, unique = true)
+	@Column(name = "rg", nullable = false, length = 20)
 	private String rg;
 	
 	@Column(name = "senha", nullable = false, length = 255)
@@ -102,11 +102,11 @@ public class Usuario implements Serializable {
 		this.nome = nome;
 	}
 
-	public Integer getMatricula() {
+	public String getMatricula() {
 		return matricula;
 	}
 
-	public void setMatricula(Integer matricula) {
+	public void setMatricula(String matricula) {
 		this.matricula = matricula;
 	}
 
@@ -183,8 +183,9 @@ public class Usuario implements Serializable {
 				+ ((dataCadastro == null) ? 0 : dataCadastro.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + matricula;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((matricula == null) ? 0 : matricula.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + ((rg == null) ? 0 : rg.hashCode());
 		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
@@ -196,77 +197,62 @@ public class Usuario implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		Usuario other = (Usuario) obj;
 		if (cpf == null) {
-			if (other.cpf != null) {
+			if (other.cpf != null)
 				return false;
-			}
-		} else if (!cpf.equals(other.cpf)) {
+		} else if (!cpf.equals(other.cpf))
 			return false;
-		}
 		if (dataCadastro == null) {
-			if (other.dataCadastro != null) {
+			if (other.dataCadastro != null)
 				return false;
-			}
-		} else if (!dataCadastro.equals(other.dataCadastro)) {
+		} else if (!dataCadastro.equals(other.dataCadastro))
 			return false;
-		}
 		if (email == null) {
-			if (other.email != null) {
+			if (other.email != null)
 				return false;
-			}
-		} else if (!email.equals(other.email)) {
+		} else if (!email.equals(other.email))
 			return false;
-		}
-		if (estado != other.estado) {
+		if (estado != other.estado)
 			return false;
-		}
-		if (id != other.id) {
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		}
-		if (matricula != other.matricula) {
+		if (matricula == null) {
+			if (other.matricula != null)
+				return false;
+		} else if (!matricula.equals(other.matricula))
 			return false;
-		}
 		if (nome == null) {
-			if (other.nome != null) {
+			if (other.nome != null)
 				return false;
-			}
-		} else if (!nome.equals(other.nome)) {
+		} else if (!nome.equals(other.nome))
 			return false;
-		}
 		if (rg == null) {
-			if (other.rg != null) {
+			if (other.rg != null)
 				return false;
-			}
-		} else if (!rg.equals(other.rg)) {
+		} else if (!rg.equals(other.rg))
 			return false;
-		}
 		if (senha == null) {
-			if (other.senha != null) {
+			if (other.senha != null)
 				return false;
-			}
-		} else if (!senha.equals(other.senha)) {
+		} else if (!senha.equals(other.senha))
 			return false;
-		}
 		if (telefone == null) {
-			if (other.telefone != null) {
+			if (other.telefone != null)
 				return false;
-			}
-		} else if (!telefone.equals(other.telefone)) {
+		} else if (!telefone.equals(other.telefone))
 			return false;
-		}
-		if (tipo != other.tipo) {
+		if (tipo != other.tipo)
 			return false;
-		}
 		return true;
 	}
 }

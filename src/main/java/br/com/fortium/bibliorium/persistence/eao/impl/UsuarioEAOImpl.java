@@ -12,6 +12,11 @@ import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
 public class UsuarioEAOImpl extends EAOImpl<Usuario, Long> implements UsuarioEAO {
 
 	@Override
+	protected Class<Usuario> getEntityClass() {
+		return Usuario.class;
+	}
+	
+	@Override
 	public TipoUsuario autenticarUsuario(String cpf, String senha) {
 		Query query = getEntityManager().createNamedQuery(Usuario.AUTENTICA_USUARIO_QUERY);
 		query.setParameter("cpf", cpf);
@@ -24,7 +29,14 @@ public class UsuarioEAOImpl extends EAOImpl<Usuario, Long> implements UsuarioEAO
 	}
 
 	@Override
-	protected Class<Usuario> getEntityClass() {
-		return Usuario.class;
+	public boolean isCpfCadastrado(String cpf) {
+		String jpql = "FROM Usuario u WHERE u.cpf = ?";
+		return exists(jpql, new Object[]{cpf});
+	}
+
+	@Override
+	public boolean isEmailCadastrado(String email) {
+		String jpql = "FROM Usuario u WHERE u.email = ?";
+		return exists(jpql, new Object[]{email});
 	}
 }
