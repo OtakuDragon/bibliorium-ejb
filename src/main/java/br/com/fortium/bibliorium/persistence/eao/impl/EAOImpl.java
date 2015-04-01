@@ -9,6 +9,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.jboss.logging.Logger;
+
 import br.com.fortium.bibliorium.persistence.eao.EAO;
 
 public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
@@ -17,10 +19,12 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	
 	private Class<T> entityClass; 
 	private String idName;
+	private Logger logger;
 	
 	protected EAOImpl(){
 		entityClass = getEntityClass();
 		setIdName(entityClass);
+		logger = Logger.getLogger(entityClass);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -54,18 +58,18 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	public T buscarUm(String jpql, Object... parametros) {
 		Query query = getEntityManager().createQuery(jpql);
 		setParametros(query, parametros);
-		
-		return (T)query.getSingleResult();
+
+		try{
+			return (T)query.getSingleResult();
+		}catch(NoResultException e){
+			getLogger().error(e);
+			return null;
+		}
 	}
 	
 	@Override
 	public boolean exists(String jpql, Object... parametros){
-		try{
-			buscarUm(jpql, parametros);
-			return Boolean.TRUE;
-		}catch(NoResultException e){
-			return Boolean.FALSE;
-		}
+		return buscarUm(jpql, parametros) != null ? Boolean.TRUE : Boolean.FALSE;
 	}
 	
 	@Override
@@ -109,5 +113,9 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 		}
 		
 		return query;
+	}
+
+	public Logger getLogger() {
+		return logger;
 	}
 }

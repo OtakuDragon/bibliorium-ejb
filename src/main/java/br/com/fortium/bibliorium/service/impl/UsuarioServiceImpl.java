@@ -40,5 +40,13 @@ public class UsuarioServiceImpl extends ServiceImpl implements UsuarioService {
 		}
 		return usuarioEAO.isEmailCadastrado(email);
 	}
+
+	@Override
+	public Usuario buscar(String cpf) {
+		if(StringUtils.isEmpty(cpf)){
+			return null;
+		}
+		return usuarioEAO.buscar(cpf);
+	}
 	
 }

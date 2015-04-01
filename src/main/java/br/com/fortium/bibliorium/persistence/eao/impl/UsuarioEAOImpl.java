@@ -39,4 +39,10 @@ public class UsuarioEAOImpl extends EAOImpl<Usuario, Long> implements UsuarioEAO
 		String jpql = "FROM Usuario u WHERE u.email = ?";
 		return exists(jpql, new Object[]{email});
 	}
+
+	@Override
+	public Usuario buscar(String cpf) {
+		String jpql = "FROM Usuario u WHERE u.cpf = ?";
+		return buscarUm(jpql, new Object[]{cpf});
+	}
 }

@@ -8,4 +8,5 @@ public interface UsuarioService extends Service {
 	void cadastrar(Usuario usuario);
 	boolean isCpfCadastrado(String cpf);
 	boolean isEmailCadastrado(String email);
+	Usuario buscar(String cpf);
 }
