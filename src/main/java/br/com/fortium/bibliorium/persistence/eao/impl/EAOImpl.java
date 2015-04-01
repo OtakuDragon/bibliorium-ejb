@@ -68,6 +68,19 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
+	public T buscarUm(Query query, Object... parametros) {
+		setParametros(query, parametros);
+
+		try{
+			return (T)query.getSingleResult();
+		}catch(NoResultException e){
+			getLogger().error(e);
+			return null;
+		}
+	}
+	
+	@Override
 	public boolean exists(String jpql, Object... parametros){
 		return buscarUm(jpql, parametros) != null ? Boolean.TRUE : Boolean.FALSE;
 	}

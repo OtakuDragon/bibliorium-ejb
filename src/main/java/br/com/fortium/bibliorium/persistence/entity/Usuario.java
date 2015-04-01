@@ -23,7 +23,7 @@ import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
 @NamedQueries({
 @NamedQuery(
 name =  Usuario.AUTENTICA_USUARIO_QUERY,
-query = "SELECT u.tipo FROM Usuario u WHERE u.cpf = :cpf AND  u.senha = :senha"
+query = "SELECT u FROM Usuario u WHERE u.cpf = ?1 AND  u.senha = ?2 AND u.estado <> br.com.fortium.bibliorium.persistence.enumeration.EstadoUsuario.INATIVO "
 )})
 @Entity
 @Table(schema="bibliorium", name="usuario")

@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import br.com.fortium.bibliorium.persistence.eao.UsuarioEAO;
 import br.com.fortium.bibliorium.persistence.entity.Usuario;
-import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
 import br.com.fortium.bibliorium.service.UsuarioService;
 
 @Stateless
@@ -16,7 +15,7 @@ public class UsuarioServiceImpl extends ServiceImpl implements UsuarioService {
 	@EJB
 	UsuarioEAO usuarioEAO;
 	
-	public TipoUsuario autenticarUsuario(String cpf, String senha){
+	public Usuario autenticarUsuario(String cpf, String senha){
 		return usuarioEAO.autenticarUsuario(cpf, senha);
 	}
 
@@ -47,6 +46,11 @@ public class UsuarioServiceImpl extends ServiceImpl implements UsuarioService {
 			return null;
 		}
 		return usuarioEAO.buscar(cpf);
+	}
+
+	@Override
+	public void update(Usuario usuario) {
+		usuarioEAO.update(usuario);
 	}
 	
 }
