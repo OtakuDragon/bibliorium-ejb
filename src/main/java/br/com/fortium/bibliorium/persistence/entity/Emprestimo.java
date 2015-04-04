@@ -49,7 +49,6 @@ public class Emprestimo implements Serializable {
 	@JoinColumn(name="id_usuario", nullable = false) 
 	private Usuario usuario;
 	
-
 	@ManyToOne
 	@JoinColumn(name="id_copia", nullable = false)
 	private Copia copia;

@@ -27,7 +27,7 @@ query = "SELECT u FROM Usuario u WHERE u.cpf = ?1 AND  u.senha = ?2 AND u.estado
 )})
 @Entity
 @Table(schema="bibliorium", name="usuario")
-public class Usuario implements Serializable {
+public class Usuario implements Serializable, Cloneable {
 	
 	public static transient final String AUTENTICADO = "autenticado";
 	public static transient final String AUTENTICA_USUARIO_QUERY = "autenticaUsuario";
@@ -85,6 +85,11 @@ public class Usuario implements Serializable {
 	
 	@Column(name = "senha", nullable = false, length = 255)
 	private String senha;
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 	public Long getId() {
 		return id;
