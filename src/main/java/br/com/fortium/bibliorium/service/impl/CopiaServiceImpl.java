@@ -30,4 +30,9 @@ public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 	public List<Copia> list() {
 		return copiaEAO.list();
 	}
+
+	@Override
+	public Copia buscar(Long id) {
+		return copiaEAO.buscar(id);
+	}
 }

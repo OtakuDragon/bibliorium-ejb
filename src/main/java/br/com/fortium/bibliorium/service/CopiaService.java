@@ -7,4 +7,5 @@ import br.com.fortium.bibliorium.persistence.entity.Copia;
 public interface CopiaService extends Service {
 	void cadastrarCopias(List<Copia> copias);
 	List<Copia> list();
+	Copia buscar(Long id);
 }
