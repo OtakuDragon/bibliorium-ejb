@@ -12,4 +12,10 @@ public class CopiaEAOImpl extends EAOImpl<Copia, Long> implements CopiaEAO {
 		return Copia.class;
 	}
 	
+	@Override
+	public Copia buscar(Long id) {
+		String jpql = "FROM Copia c WHERE c.id = ?1 AND c.estado != br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia.INATIVA ";
+		return buscarUm(jpql, new Object[]{id});
+	}
+	
 }

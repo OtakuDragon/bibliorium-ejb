@@ -86,12 +86,9 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public T buscar(ID id) {
 		String jpql = "FROM "+entityClass.getSimpleName()+" entity WHERE entity."+idName+" = ?1";
-		Query query = getEntityManager().createQuery(jpql);
-		query.setParameter(1, id);
-		return (T) query.getSingleResult();
+		return buscarUm(jpql, new Object[]{id});
 	};
 	
 	@Override
