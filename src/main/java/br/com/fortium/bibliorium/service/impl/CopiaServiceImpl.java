@@ -35,4 +35,12 @@ public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 	public Copia buscar(Long id) {
 		return copiaEAO.buscar(id);
 	}
+
+	@Override
+	public void update(Copia copia) {
+		if(copia == null || copia.getId() == null){
+			throw new IllegalArgumentException("Copia ou seu Id nulo");
+		}
+		copiaEAO.update(copia);
+	}
 }

@@ -7,4 +7,5 @@ public interface UsuarioEAO extends EAO<Usuario, Long> {
 	boolean isCpfCadastrado(String cpf);
 	boolean isEmailCadastrado(String email);
 	Usuario buscar(String cpf);
+	Usuario buscarComInativos(String cpf);
 }

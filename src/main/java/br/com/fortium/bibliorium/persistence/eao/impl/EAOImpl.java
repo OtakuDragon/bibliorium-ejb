@@ -54,6 +54,14 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	}
 	
 	@Override
+	public Long count(String jpql, Object... parametros){
+		Query query = getEntityManager().createQuery(jpql);
+		setParametros(query, parametros);
+		
+		return (Long)query.getSingleResult();
+	}
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public T buscarUm(String jpql, Object... parametros) {
 		Query query = getEntityManager().createQuery(jpql);

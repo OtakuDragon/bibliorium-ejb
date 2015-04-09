@@ -8,6 +8,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 
 import br.com.fortium.bibliorium.persistence.eao.EmprestimoEAO;
+import br.com.fortium.bibliorium.persistence.entity.Copia;
 import br.com.fortium.bibliorium.persistence.entity.Emprestimo;
 import br.com.fortium.bibliorium.persistence.entity.Usuario;
 
@@ -36,6 +37,18 @@ public class EmprestimoEAOImpl extends EAOImpl<Emprestimo, Long> implements Empr
 		}
 		
 		return buscar(jpql.toString(), parametros.toArray());
+	}
+
+	@Override
+	public Long countEmprestimoAtivos(Usuario leitor) {
+		String jpql = "SELECT COUNT(*) FROM Emprestimo e WHERE e.usuario = ?1 AND e.dataFechamento is null ";
+		return count(jpql, leitor);
+	}
+
+	@Override
+	public Emprestimo buscarReserva(Copia copia) {
+		String jpql = "FROM Emprestimo e WHERE e.copia = ?1 AND e.dataFechamento IS NULL AND e.tipo = br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo.RESERVA ";
+		return buscarUm(jpql, copia);
 	}
 
 }

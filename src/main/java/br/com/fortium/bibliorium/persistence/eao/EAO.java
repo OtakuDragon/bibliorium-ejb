@@ -10,6 +10,7 @@ public interface EAO<T,ID> {
 	void save(T entity);
 	List<T> list();
 	T buscar(ID id);
+	Long count(String jpql, Object... parametros);
 	List<T> buscar(String jpql, Object... parametros);
 	T buscarUm(String jpql, Object... parametros);
 	T buscarUm(Query query, Object... parametros);

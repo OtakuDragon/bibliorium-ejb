@@ -49,6 +49,14 @@ public class UsuarioServiceImpl extends ServiceImpl implements UsuarioService {
 	}
 
 	@Override
+	public Usuario buscarComInativos(String cpf) {
+		if(StringUtils.isEmpty(cpf)){
+			return null;
+		}
+		return usuarioEAO.buscarComInativos(cpf);
+	}
+	
+	@Override
 	public void update(Usuario usuario) {
 		usuarioEAO.update(usuario);
 	}

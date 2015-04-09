@@ -22,19 +22,25 @@ public class UsuarioEAOImpl extends EAOImpl<Usuario, Long> implements UsuarioEAO
 
 	@Override
 	public boolean isCpfCadastrado(String cpf) {
-		String jpql = "FROM Usuario u WHERE u.cpf = ?";
+		String jpql = "FROM Usuario u WHERE u.cpf = ? ";
 		return exists(jpql, new Object[]{cpf});
 	}
 
 	@Override
 	public boolean isEmailCadastrado(String email) {
-		String jpql = "FROM Usuario u WHERE u.email = ?";
+		String jpql = "FROM Usuario u WHERE u.email = ? ";
 		return exists(jpql, new Object[]{email});
 	}
 
 	@Override
 	public Usuario buscar(String cpf) {
-		String jpql = "FROM Usuario u WHERE u.cpf = ?";
+		String jpql = "FROM Usuario u WHERE u.cpf = ? AND u.estado <> br.com.fortium.bibliorium.persistence.enumeration.EstadoUsuario.INATIVO ";
+		return buscarUm(jpql, new Object[]{cpf});
+	}
+	
+	@Override
+	public Usuario buscarComInativos(String cpf) {
+		String jpql = "FROM Usuario u WHERE u.cpf = ? ";
 		return buscarUm(jpql, new Object[]{cpf});
 	}
 }

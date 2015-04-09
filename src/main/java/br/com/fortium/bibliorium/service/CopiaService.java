@@ -8,4 +8,5 @@ public interface CopiaService extends Service {
 	void cadastrarCopias(List<Copia> copias);
 	List<Copia> list();
 	Copia buscar(Long id);
+	void update(Copia copia);
 }
