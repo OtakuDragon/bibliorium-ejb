@@ -14,4 +14,6 @@ public interface EmprestimoService extends Service {
 	Emprestimo buscarReserva(Copia copia);
 	void update(Emprestimo emprestimo);
 	void concluirEmprestimo(Emprestimo emprestimo);
+	void cancelarReserva(Copia copia);
+	Emprestimo buscarEmprestimo(Copia copia);
 }

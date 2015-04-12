@@ -50,5 +50,11 @@ public class EmprestimoEAOImpl extends EAOImpl<Emprestimo, Long> implements Empr
 		String jpql = "FROM Emprestimo e WHERE e.copia = ?1 AND e.dataFechamento IS NULL AND e.tipo = br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo.RESERVA ";
 		return buscarUm(jpql, copia);
 	}
+	
+	@Override
+	public Emprestimo buscarEmprestimo(Copia copia) {
+		String jpql = "FROM Emprestimo e WHERE e.copia = ?1 AND e.dataFechamento IS NULL AND e.tipo = br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo.EMPRESTIMO ";
+		return buscarUm(jpql, copia);
+	}
 
 }

@@ -1,5 +1,6 @@
 package br.com.fortium.bibliorium.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo;
 import br.com.fortium.bibliorium.service.CopiaService;
 import br.com.fortium.bibliorium.service.EmprestimoService;
+import br.com.fortium.bibliorium.util.DataUtil;
 
 @Stateless
 public class EmprestimoServiceImpl implements EmprestimoService {
@@ -66,6 +68,28 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 		}
 		return emprestimoEAO.buscarReserva(copia);
 	}
+	
+	@Override
+	public Emprestimo buscarEmprestimo(Copia copia) {
+		if(copia == null){
+			throw new IllegalArgumentException("A copia não pode ser nula");
+		}
+		return emprestimoEAO.buscarEmprestimo(copia);
+	}
+	
+	@Override
+	public void cancelarReserva(Copia copia) {
+		Emprestimo reserva = buscarReserva(copia);
+		
+		if(reserva == null){
+			throw new IllegalArgumentException("A reserva não existe");
+		}
+		
+		reserva.getCopia().setEstado(EstadoCopia.DISPONIVEL);
+		reserva.setDataFechamento(new Date());
+		
+		emprestimoEAO.update(reserva);
+	}
 
 	@Override
 	public void update(Emprestimo emprestimo) {
@@ -75,9 +99,16 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 	@Override
 	public void concluirEmprestimo(Emprestimo emprestimo) {
 		emprestimo.setDataFechamento(new Date());
+		emprestimo.getCopia().setEstado(EstadoCopia.DISPONIVEL);
 		
 		if(emprestimo.getTipo() == TipoEmprestimo.EMPRESTIMO){
-			//TODO Calcular e setar multa
+			int diasAtraso = DataUtil.getDiferencaEmDias(emprestimo.getDataDevolucao(), new Date());
+			
+			BigDecimal valorMulta = new BigDecimal(1.5 * diasAtraso).setScale(2);
+			
+			if(valorMulta.doubleValue() > 0){
+				emprestimo.setValorMulta(valorMulta);
+			}
 		}
 		
 		update(emprestimo);

@@ -11,4 +11,5 @@ public interface EmprestimoEAO extends EAO<Emprestimo, Long> {
 	List<Emprestimo> buscar(Usuario usuario, Date periodo);
 	Long countEmprestimoAtivos(Usuario leitor);
 	Emprestimo buscarReserva(Copia copia);
+	Emprestimo buscarEmprestimo(Copia copia);
 }
