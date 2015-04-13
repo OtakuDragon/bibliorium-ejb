@@ -7,11 +7,13 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import br.com.fortium.bibliorium.exception.ValidationException;
 import br.com.fortium.bibliorium.persistence.eao.EmprestimoEAO;
 import br.com.fortium.bibliorium.persistence.entity.Copia;
 import br.com.fortium.bibliorium.persistence.entity.Emprestimo;
 import br.com.fortium.bibliorium.persistence.entity.Usuario;
 import br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia;
+import br.com.fortium.bibliorium.persistence.enumeration.EstadoUsuario;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo;
 import br.com.fortium.bibliorium.service.CopiaService;
 import br.com.fortium.bibliorium.service.EmprestimoService;
@@ -35,10 +37,8 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 	}
 
 	@Override
-	public void efetuarEmprestimo(Emprestimo emprestimo) {
-		if(emprestimo == null || emprestimo.getCopia() == null){
-			throw new IllegalArgumentException("O emprestimo inválido, ele ou a copia estão nulos");
-		}
+	public void efetuarEmprestimo(Emprestimo emprestimo) throws ValidationException {
+		validarEmprestimo(emprestimo);
 		
 		Copia copia = emprestimo.getCopia();
 		
@@ -112,6 +112,47 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 		}
 		
 		update(emprestimo);
+	}
+
+	@Override
+	public Emprestimo renovarEmprestimo(Copia copia) throws ValidationException {
+		Emprestimo emprestimo = buscarEmprestimo(copia);
+
+		validarRenovacao(emprestimo);
+		
+		emprestimo.setDataRenovacao(new Date());
+		emprestimo.setDataDevolucao(DataUtil.calcularDataDevolucao(emprestimo.getUsuario().getTipo()));
+		
+		emprestimoEAO.update(emprestimo);
+		
+		return emprestimo;
+	}
+	
+	private void validarEmprestimo(Emprestimo emprestimo) throws ValidationException {
+		Usuario leitor = emprestimo.getUsuario();
+		
+		if(emprestimo == null || emprestimo.getCopia() == null){
+			throw new IllegalArgumentException("O emprestimo inválido, ele ou a copia estão nulos");
+		} else if(leitor.getEstado() == EstadoUsuario.INADIMPLENTE){
+			throw new ValidationException("Empréstimo/Reserva recusado(a), este leitor está inadimplente");
+		}else if(countEmprestimoAtivos(leitor) >= 5){
+			throw new ValidationException("Empréstimo/Reserva recusado(a), este leitor já atingiu o limite de 5 empréstimo/reserva ativos");
+		}
+	}
+	
+	private void validarRenovacao(Emprestimo emprestimo) throws ValidationException{
+		Usuario leitor = emprestimo.getUsuario();
+		
+		if(countEmprestimoAtivos(emprestimo.getUsuario()) >= 5){
+			throw new ValidationException("Empréstimo/Reserva recusado(a), este leitor já atingiu o limite de 5 empréstimo/reserva ativos");
+		}else if(emprestimo.getDataRenovacao() != null){
+			//TODO Fazer com que sejam 4 renovações e não uma.
+			throw new ValidationException("Este emprestimo ja foi renovado uma vez.");
+		}else if(leitor.getEstado() == EstadoUsuario.INADIMPLENTE){
+			throw new ValidationException("Usuário inadimplente");
+		}else if(emprestimo.getDataEmprestimo().after(emprestimo.getDataDevolucao())){
+			throw new ValidationException("Emprestimo vencido");
+		}
 	}
 
 }
