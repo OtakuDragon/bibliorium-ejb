@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.fortium.bibliorium.persistence.enumeration.EstadoEmprestimo;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo;
 
 @Entity
@@ -26,20 +27,23 @@ import br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo;
 public class Emprestimo implements Serializable {
 
 	private static final long serialVersionUID = -6434682029164398820L;
+	public static final BigDecimal MULTA_DIARIA = new BigDecimal(1.5).setScale(2);
 
-	public Emprestimo(){}
+	public Emprestimo(){
+		setEstado(EstadoEmprestimo.ABERTO);
+	}
 	
-	public Emprestimo(Usuario usuario, Copia copia, Date dataEmprestimo, Date dataDevolucao, Date dataFechamento, BigDecimal valorMulta, TipoEmprestimo tipo, Date dataRenovacao) {
+	public Emprestimo(Usuario usuario, Copia copia, Date dataEmprestimo, Date dataPrevista, Date dataFechamento, BigDecimal valorMulta, TipoEmprestimo tipo, Date dataRenovacao) {
 		setUsuario(usuario);
 		setCopia(copia);
 		setDataEmprestimo(dataEmprestimo);
-		setDataDevolucao(dataDevolucao);
+		setDataPrevista(dataPrevista);
 		setDataFechamento(dataFechamento);
 		setValorMulta(valorMulta);
 		setTipo(tipo);
 		setDataRenovacao(dataRenovacao);
 	}
-	
+
 	@Id
 	@SequenceGenerator(name="emprestimoIdSEQ", sequenceName="id_emprestimo_seq", initialValue = 1 , allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="emprestimoIdSEQ")
@@ -58,15 +62,17 @@ public class Emprestimo implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataEmprestimo;
 	
-	
-	@Column(name = "data_devolucao")
+	@Column(name = "data_prevista")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date dataDevolucao;
-	
+	private Date dataPrevista;
 	
 	@Column(name = "data_fechamento")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataFechamento;
+	
+	@Column(name = "estado", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private EstadoEmprestimo estado; 
 	
 	@Column(name = "valor_multa")
 	private BigDecimal valorMulta;
@@ -79,6 +85,14 @@ public class Emprestimo implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataRenovacao;
 
+	public Boolean isAberto(){
+		return getEstado() == EstadoEmprestimo.ABERTO;
+	}
+	
+	public void incrementaMulta(){
+		setValorMulta(getValorMulta().add(Emprestimo.MULTA_DIARIA));
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -111,12 +125,12 @@ public class Emprestimo implements Serializable {
 		this.dataEmprestimo = dataEmprestimo;
 	}
 
-	public Date getDataDevolucao() {
-		return dataDevolucao;
+	public Date getDataPrevista() {
+		return dataPrevista;
 	}
 
-	public void setDataDevolucao(Date dataDevolucao) {
-		this.dataDevolucao = dataDevolucao;
+	public void setDataPrevista(Date dataPrevista) {
+		this.dataPrevista = dataPrevista;
 	}
 
 	public Date getDataFechamento() {
@@ -124,6 +138,7 @@ public class Emprestimo implements Serializable {
 	}
 
 	public void setDataFechamento(Date dataFechamento) {
+		setEstado(getValorMulta() == null ? EstadoEmprestimo.FINALIZADO : EstadoEmprestimo.DEVIDO);
 		this.dataFechamento = dataFechamento;
 	}
 
@@ -132,6 +147,9 @@ public class Emprestimo implements Serializable {
 	}
 
 	public void setValorMulta(BigDecimal valorMulta) {
+		if(valorMulta != null){
+			setEstado(EstadoEmprestimo.DEVIDO);
+		}
 		this.valorMulta = valorMulta;
 	}
 
@@ -150,6 +168,14 @@ public class Emprestimo implements Serializable {
 	public void setDataRenovacao(Date dataRenovacao) {
 		this.dataRenovacao = dataRenovacao;
 	}
+	
+	public EstadoEmprestimo getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadoEmprestimo estado) {
+		this.estado = estado;
+	}
 
 	@Override
 	public int hashCode() {
@@ -157,14 +183,15 @@ public class Emprestimo implements Serializable {
 		int result = 1;
 		result = prime * result + ((copia == null) ? 0 : copia.hashCode());
 		result = prime * result
-				+ ((dataDevolucao == null) ? 0 : dataDevolucao.hashCode());
-		result = prime * result
 				+ ((dataEmprestimo == null) ? 0 : dataEmprestimo.hashCode());
 		result = prime * result
 				+ ((dataFechamento == null) ? 0 : dataFechamento.hashCode());
 		result = prime * result
+				+ ((dataPrevista == null) ? 0 : dataPrevista.hashCode());
+		result = prime * result
 				+ ((dataRenovacao == null) ? 0 : dataRenovacao.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
 		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
 		result = prime * result
@@ -174,71 +201,57 @@ public class Emprestimo implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		Emprestimo other = (Emprestimo) obj;
 		if (copia == null) {
-			if (other.copia != null) {
+			if (other.copia != null)
 				return false;
-			}
-		} else if (!copia.equals(other.copia)) {
+		} else if (!copia.equals(other.copia))
 			return false;
-		}
-		if (dataDevolucao == null) {
-			if (other.dataDevolucao != null) {
-				return false;
-			}
-		} else if (!dataDevolucao.equals(other.dataDevolucao)) {
-			return false;
-		}
 		if (dataEmprestimo == null) {
-			if (other.dataEmprestimo != null) {
+			if (other.dataEmprestimo != null)
 				return false;
-			}
-		} else if (!dataEmprestimo.equals(other.dataEmprestimo)) {
+		} else if (!dataEmprestimo.equals(other.dataEmprestimo))
 			return false;
-		}
 		if (dataFechamento == null) {
-			if (other.dataFechamento != null) {
+			if (other.dataFechamento != null)
 				return false;
-			}
-		} else if (!dataFechamento.equals(other.dataFechamento)) {
+		} else if (!dataFechamento.equals(other.dataFechamento))
 			return false;
-		}
+		if (dataPrevista == null) {
+			if (other.dataPrevista != null)
+				return false;
+		} else if (!dataPrevista.equals(other.dataPrevista))
+			return false;
 		if (dataRenovacao == null) {
-			if (other.dataRenovacao != null) {
+			if (other.dataRenovacao != null)
 				return false;
-			}
-		} else if (!dataRenovacao.equals(other.dataRenovacao)) {
+		} else if (!dataRenovacao.equals(other.dataRenovacao))
 			return false;
-		}
-		if (id != other.id) {
+		if (estado != other.estado)
 			return false;
-		}
-		if (tipo != other.tipo) {
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		}
+		if (tipo != other.tipo)
+			return false;
 		if (usuario == null) {
-			if (other.usuario != null) {
+			if (other.usuario != null)
 				return false;
-			}
-		} else if (!usuario.equals(other.usuario)) {
+		} else if (!usuario.equals(other.usuario))
 			return false;
-		}
 		if (valorMulta == null) {
-			if (other.valorMulta != null) {
+			if (other.valorMulta != null)
 				return false;
-			}
-		} else if (!valorMulta.equals(other.valorMulta)) {
+		} else if (!valorMulta.equals(other.valorMulta))
 			return false;
-		}
 		return true;
 	}
 }

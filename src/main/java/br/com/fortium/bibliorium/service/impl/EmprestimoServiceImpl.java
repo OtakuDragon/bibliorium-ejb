@@ -1,6 +1,5 @@
 package br.com.fortium.bibliorium.service.impl;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import br.com.fortium.bibliorium.persistence.entity.Copia;
 import br.com.fortium.bibliorium.persistence.entity.Emprestimo;
 import br.com.fortium.bibliorium.persistence.entity.Usuario;
 import br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia;
+import br.com.fortium.bibliorium.persistence.enumeration.EstadoEmprestimo;
 import br.com.fortium.bibliorium.persistence.enumeration.EstadoUsuario;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo;
 import br.com.fortium.bibliorium.service.CopiaService;
@@ -34,6 +34,14 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 			throw new IllegalArgumentException("O usuário não pode ser nulo");
 		}
 		return emprestimoEAO.buscar(usuario, periodo);
+	}
+	
+	@Override
+	public Emprestimo buscar(Long id) {
+		if(id == null){
+			throw new IllegalArgumentException("O id não pode ser nulo");
+		}
+		return emprestimoEAO.buscar(id);
 	}
 
 	@Override
@@ -78,6 +86,14 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 	}
 	
 	@Override
+	public Emprestimo buscarEmprestimo(Long id) {
+		if(id == null){
+			throw new IllegalArgumentException("O id não pode ser nulo");
+		}
+		return emprestimoEAO.buscarEmprestimo(id);
+	}
+	
+	@Override
 	public void cancelarReserva(Copia copia) {
 		Emprestimo reserva = buscarReserva(copia);
 		
@@ -101,17 +117,15 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 		emprestimo.setDataFechamento(new Date());
 		emprestimo.getCopia().setEstado(EstadoCopia.DISPONIVEL);
 		
-		if(emprestimo.getTipo() == TipoEmprestimo.EMPRESTIMO){
-			int diasAtraso = DataUtil.getDiferencaEmDias(emprestimo.getDataDevolucao(), new Date());
-			
-			BigDecimal valorMulta = new BigDecimal(1.5 * diasAtraso).setScale(2);
-			
-			if(valorMulta.doubleValue() > 0){
-				emprestimo.setValorMulta(valorMulta);
-			}
-		}
-		
 		update(emprestimo);
+	}
+	
+	@Override
+	public void liquidarMulta(Emprestimo emprestimo) {
+		emprestimo.setDataFechamento(new Date());
+		emprestimo.setEstado(EstadoEmprestimo.FINALIZADO);
+		
+		emprestimoEAO.update(emprestimo);
 	}
 
 	@Override
@@ -121,13 +135,40 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 		validarRenovacao(emprestimo);
 		
 		emprestimo.setDataRenovacao(new Date());
-		emprestimo.setDataDevolucao(DataUtil.calcularDataDevolucao(emprestimo.getUsuario().getTipo()));
+		emprestimo.setDataPrevista(DataUtil.calcularDataDevolucao(emprestimo.getUsuario().getTipo()));
 		
 		emprestimoEAO.update(emprestimo);
 		
 		return emprestimo;
 	}
 	
+	@Override
+	public List<Emprestimo> buscarEmprestimosAtivos() {
+		return emprestimoEAO.buscarEmprestimosAtivos();
+	}
+
+	@Override
+	public void atualizarEmprestimosAtivos() {
+		List<Emprestimo> emprestimosAtivos = buscarEmprestimosAtivos();
+		
+		for (Emprestimo emprestimoAtivo : emprestimosAtivos) {
+			switch(emprestimoAtivo.getEstado()){
+				case ABERTO:
+					if(emprestimoAtivo.getDataPrevista().before(new Date())){
+						emprestimoAtivo.setValorMulta(Emprestimo.MULTA_DIARIA);
+					}
+					break;
+				case DEVIDO:
+					emprestimoAtivo.incrementaMulta();
+					break;
+				default:
+					break;
+			}
+			
+			emprestimoEAO.update(emprestimoAtivo);
+		}
+	}
+
 	private void validarEmprestimo(Emprestimo emprestimo) throws ValidationException {
 		Usuario leitor = emprestimo.getUsuario();
 		
@@ -150,7 +191,7 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 			throw new ValidationException("Este emprestimo ja foi renovado uma vez.");
 		}else if(leitor.getEstado() == EstadoUsuario.INADIMPLENTE){
 			throw new ValidationException("Usuário inadimplente");
-		}else if(emprestimo.getDataEmprestimo().after(emprestimo.getDataDevolucao())){
+		}else if(emprestimo.getDataEmprestimo().after(emprestimo.getDataPrevista())){
 			throw new ValidationException("Emprestimo vencido");
 		}
 	}
