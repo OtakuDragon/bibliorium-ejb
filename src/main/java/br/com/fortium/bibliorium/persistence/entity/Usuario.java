@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang3.StringUtils;
+
 import br.com.fortium.bibliorium.persistence.enumeration.EstadoUsuario;
 import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
 
@@ -91,6 +93,14 @@ public class Usuario implements Serializable, Cloneable {
 		return super.clone();
 	}
 
+	public String getTipoFormatado(){
+		if(getTipo() != null){
+			String tipo = getTipo().toString().toLowerCase();
+			return StringUtils.capitalize(tipo);
+		}
+		return null;
+	}
+	
 	public Long getId() {
 		return id;
 	}
