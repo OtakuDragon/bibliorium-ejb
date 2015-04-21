@@ -5,6 +5,7 @@
         version="2.0">
     <persistence-unit name="biblioriumPU">
     	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+<!--    <jta-data-source>java:jboss/datasources/PostgreSQLDS</jta-data-source>  -->
 		<jta-data-source>java:jboss/datasources/BiblioriumDS</jta-data-source> 
 <!-- 	<jta-data-source>java:jboss/datasources/H2DS</jta-data-source>  -->
 		<class>br.com.fortium.bibliorium.persistence.entity.Categoria</class>
