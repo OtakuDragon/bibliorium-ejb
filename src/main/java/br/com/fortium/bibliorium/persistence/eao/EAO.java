@@ -17,4 +17,5 @@ public interface EAO<T,ID> {
 	boolean exists(String jpql, Object... parametros);
 	T update(T entity);
 	void delete(T entity);
+	int update(String jpql, Object... parametros);
 }

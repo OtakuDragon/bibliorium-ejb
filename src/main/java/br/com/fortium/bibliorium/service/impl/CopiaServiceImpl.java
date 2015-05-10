@@ -7,11 +7,16 @@ import javax.ejb.Stateless;
 
 import br.com.fortium.bibliorium.persistence.eao.CopiaEAO;
 import br.com.fortium.bibliorium.persistence.entity.Copia;
+import br.com.fortium.bibliorium.persistence.entity.Livro;
 import br.com.fortium.bibliorium.service.CopiaService;
+import br.com.fortium.bibliorium.service.LivroService;
 
 @Stateless
 public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 
+	@EJB
+	private LivroService livroService;
+	
 	@EJB
 	private CopiaEAO copiaEAO;
 	
@@ -22,6 +27,11 @@ public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 		}
 		
 		for (Copia copia : copias) {
+			if(! livroService.isIsbnCadastrado(copia.getLivro().getIsbn())){
+				livroService.save(copia.getLivro());
+			}else{
+				copia.setLivro(livroService.buscarPorIsbn(copia.getLivro().getIsbn()));
+			}
 			copiaEAO.save(copia);
 		}
 	}
@@ -42,5 +52,10 @@ public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 			throw new IllegalArgumentException("Copia ou seu Id nulo");
 		}
 		copiaEAO.update(copia);
+	}
+	
+	@Override
+	public void desativarCopias(Livro livro) {
+		copiaEAO.desativarCopias(livro);
 	}
 }

@@ -76,6 +76,14 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	}
 	
 	@Override
+	public int update(String jpql, Object... parametros) {
+		Query query = getEntityManager().createQuery(jpql);
+		setParametros(query, parametros);
+
+		return query.executeUpdate();
+	}
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public T buscarUm(Query query, Object... parametros) {
 		setParametros(query, parametros);
@@ -90,7 +98,7 @@ public abstract class EAOImpl<T,ID> implements EAO<T,ID>{
 	
 	@Override
 	public boolean exists(String jpql, Object... parametros){
-		return buscarUm(jpql, parametros) != null ? Boolean.TRUE : Boolean.FALSE;
+		return !buscar(jpql, parametros).isEmpty();
 	}
 	
 	@Override

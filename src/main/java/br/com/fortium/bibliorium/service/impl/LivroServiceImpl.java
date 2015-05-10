@@ -45,4 +45,19 @@ public class LivroServiceImpl extends ServiceImpl implements LivroService {
 		return livroEAO.buscarPorFiltro(filtro);
 	}
 
+	@Override
+	public void save(Livro livro) {
+		livroEAO.save(livro);
+	}
+
+	@Override
+	public boolean isIsbnAtivo(String isbn) {
+		return 	livroEAO.isIsbnAtivo(isbn);
+	}
+
+	@Override
+	public Livro buscarPorIsbn(String isbn) {
+		return livroEAO.buscarPorIsbn(isbn);
+	}
+
 }
