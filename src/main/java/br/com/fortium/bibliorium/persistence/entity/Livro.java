@@ -81,13 +81,13 @@ public class Livro implements Serializable, Cloneable {
 	@Column(name = "num_paginas", nullable = false)
 	private Integer numPaginas;
 	
-	@Column(name = "corredor", nullable = false)
+	@Column(name = "corredor", nullable = false, length = 5)
 	private String corredor;
 	
-	@Column(name = "estante", nullable = false)
+	@Column(name = "estante", nullable = false, length = 5)
 	private String estante;
 	
-	@Column(name = "prateleira", nullable = false)
+	@Column(name = "prateleira", nullable = false, length = 5)
 	private String prateleira;
 	
 	public List<Copia> getCopiasDisponiveis(){

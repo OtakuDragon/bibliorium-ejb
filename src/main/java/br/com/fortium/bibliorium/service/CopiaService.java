@@ -11,4 +11,5 @@ public interface CopiaService extends Service {
 	Copia buscar(Long idLivro, Long id);
 	void update(Copia copia);
 	void desativarCopias(Livro livro);
+	Copia attachLivro(Copia copia);
 }

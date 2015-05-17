@@ -118,6 +118,7 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 	public void concluirEmprestimo(Emprestimo emprestimo) {
 		emprestimo.setDataFechamento(new Date());
 		emprestimo.getCopia().setEstado(EstadoCopia.DISPONIVEL);
+		emprestimo.setCopia(copiaService.attachLivro(emprestimo.getCopia()));
 		
 		update(emprestimo);
 	}
@@ -138,6 +139,7 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 		
 		emprestimo.setDataRenovacao(new Date());
 		emprestimo.setDataPrevista(DataUtil.calcularDataDevolucao(emprestimo.getUsuario().getTipo()));
+		emprestimo.getCopia().getLivro();
 		
 		emprestimoEAO.update(emprestimo);
 		

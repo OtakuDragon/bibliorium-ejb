@@ -55,12 +55,18 @@ public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 			throw new IllegalArgumentException("Copia ou seu Id nulo");
 		}
 		
-		copia.setLivro(livroService.update(copia.getLivro()));
+		attachLivro(copia);
 		copiaEAO.update(copia);
 	}
 	
 	@Override
 	public void desativarCopias(Livro livro) {
 		copiaEAO.desativarCopias(livro);
+	}
+
+	@Override
+	public Copia attachLivro(Copia copia) {
+		copia.setLivro(livroService.update(copia.getLivro()));
+		return copia;
 	}
 }

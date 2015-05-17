@@ -20,7 +20,7 @@ import br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia;
 public class Copia implements Serializable {
 	
 	private static final long serialVersionUID = -2935125477803111512L;
-
+	
 	public Copia() {}
 	
 	public Copia(Livro livro, EstadoCopia estado) {
@@ -37,10 +37,10 @@ public class Copia implements Serializable {
 	@JoinColumn(name="id_livro", nullable = false) 
 	private Livro livro;
 	
-	@Column(name = "estado", nullable = false)
+	@Column(name = "estado", nullable = false, length = 20)
 	@Enumerated(EnumType.STRING)
 	private EstadoCopia estado;
-
+	
 	public Long getId() {
 		return id;
 	}

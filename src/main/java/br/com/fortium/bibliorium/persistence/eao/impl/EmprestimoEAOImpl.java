@@ -5,16 +5,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import br.com.fortium.bibliorium.persistence.eao.EmprestimoEAO;
 import br.com.fortium.bibliorium.persistence.entity.Copia;
 import br.com.fortium.bibliorium.persistence.entity.Emprestimo;
 import br.com.fortium.bibliorium.persistence.entity.Usuario;
+import br.com.fortium.bibliorium.service.CopiaService;
 
 @Stateless
 public class EmprestimoEAOImpl extends EAOImpl<Emprestimo, Long> implements EmprestimoEAO {
 
+	@EJB
+	private CopiaService copiaService;
+	
 	@Override
 	protected Class<Emprestimo> getEntityClass() {
 		return Emprestimo.class;
@@ -48,13 +53,13 @@ public class EmprestimoEAOImpl extends EAOImpl<Emprestimo, Long> implements Empr
 	@Override
 	public Emprestimo buscarReserva(Copia copia) {
 		String jpql = "FROM Emprestimo e WHERE e.copia = ?1 AND e.dataFechamento IS NULL AND e.tipo = br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo.RESERVA ";
-		return buscarUm(jpql, copia);
+		return buscarUm(jpql, copiaService.attachLivro(copia));
 	}
 	
 	@Override
 	public Emprestimo buscarEmprestimo(Copia copia) {
 		String jpql = "FROM Emprestimo e WHERE e.copia = ?1 AND e.dataFechamento IS NULL AND e.tipo = br.com.fortium.bibliorium.persistence.enumeration.TipoEmprestimo.EMPRESTIMO ";
-		return buscarUm(jpql, copia);
+		return buscarUm(jpql, copiaService.attachLivro(copia));
 	}
 
 	@Override

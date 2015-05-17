@@ -81,7 +81,7 @@ public class Emprestimo implements Serializable {
 	@Column(name = "valor_multa")
 	private BigDecimal valorMulta;
 	
-	@Column(name = "tipo", nullable = false)
+	@Column(name = "tipo", nullable = false, length = 20)
 	@Enumerated(EnumType.STRING)
 	private TipoEmprestimo tipo;
 	

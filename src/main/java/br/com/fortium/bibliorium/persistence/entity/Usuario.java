@@ -55,23 +55,23 @@ public class Usuario implements Serializable, Cloneable {
 	@Column(name = "id_usuario")
 	private Long id;
 	
-	@Column(name = "nome", nullable = false, length = 80)
+	@Column(name = "nome", nullable = false, length = 120)
 	private String nome;
 	
-	@Column(name = "matricula", nullable = true)
+	@Column(name = "matricula", nullable = true, length = 30)
 	private String matricula;
 	
 	@Column(name = "cpf", nullable = false, unique = true, length = 11)
 	private String cpf;
 	
-	@Column(name = "tipo", nullable = false)
+	@Column(name = "tipo", nullable = false, length = 20)
 	@Enumerated(EnumType.STRING)
 	private TipoUsuario tipo;
 	
 	@Column(name = "email", nullable = false, unique = true, length = 100)
 	private String email;
 
-	@Column(name = "estado", nullable = false)
+	@Column(name = "estado", nullable = false, length = 20)
 	@Enumerated(EnumType.STRING)
 	private EstadoUsuario estado;
 	
@@ -85,7 +85,7 @@ public class Usuario implements Serializable, Cloneable {
 	@Column(name = "rg", nullable = false, length = 20)
 	private String rg;
 	
-	@Column(name = "senha", nullable = false, length = 255)
+	@Column(name = "senha", nullable = false, length = 20)
 	private String senha;
 	
 	@Override
