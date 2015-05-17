@@ -12,7 +12,7 @@ public interface EmprestimoService extends Service {
 	List<Emprestimo> buscar(Usuario usuario, Date periodo);
 	Emprestimo buscar(Long id);
 	void efetuarEmprestimo(Emprestimo emprestimo) throws ValidationException;
-	Long countEmprestimoAtivos(Usuario leitor);
+	Long countEmprestimoAtivos(Usuario usuario);
 	Emprestimo buscarReserva(Copia copia);
 	void update(Emprestimo emprestimo);
 	void concluirEmprestimo(Emprestimo emprestimo);

@@ -9,7 +9,7 @@ public interface LivroService extends Service {
 	boolean isIsbnAtivo(String isbn);
 	List<Livro> list();
 	void save(Livro livro);
-	void update(Livro livro);
+	Livro update(Livro livro);
 	void delete(Livro livro);
 	List<Livro> buscarPorFiltro(Livro filtro);
 	Livro buscarPorIsbn(String isbn);

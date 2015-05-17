@@ -40,9 +40,9 @@ public class EmprestimoEAOImpl extends EAOImpl<Emprestimo, Long> implements Empr
 	}
 
 	@Override
-	public Long countEmprestimoAtivos(Usuario leitor) {
+	public Long countEmprestimoAtivos(Usuario usuario) {
 		String jpql = "SELECT COUNT(*) FROM Emprestimo e WHERE e.usuario = ?1 AND e.dataFechamento is null ";
-		return count(jpql, leitor);
+		return count(jpql, usuario);
 	}
 
 	@Override

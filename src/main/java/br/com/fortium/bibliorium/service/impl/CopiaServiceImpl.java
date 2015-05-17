@@ -26,12 +26,15 @@ public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 			throw new IllegalArgumentException("Lista de copias inválida");
 		}
 		
+		Long idCounter = 1l;
+		
 		for (Copia copia : copias) {
 			if(! livroService.isIsbnCadastrado(copia.getLivro().getIsbn())){
 				livroService.save(copia.getLivro());
 			}else{
 				copia.setLivro(livroService.buscarPorIsbn(copia.getLivro().getIsbn()));
 			}
+			copia.setId(idCounter++);
 			copiaEAO.save(copia);
 		}
 	}
@@ -42,8 +45,8 @@ public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 	}
 
 	@Override
-	public Copia buscar(Long id) {
-		return copiaEAO.buscar(id);
+	public Copia buscar(Long idLivro, Long id) {
+		return copiaEAO.buscarCopia(idLivro, id);
 	}
 
 	@Override
@@ -51,6 +54,8 @@ public class CopiaServiceImpl extends ServiceImpl implements CopiaService {
 		if(copia == null || copia.getId() == null){
 			throw new IllegalArgumentException("Copia ou seu Id nulo");
 		}
+		
+		copia.setLivro(livroService.update(copia.getLivro()));
 		copiaEAO.update(copia);
 	}
 	

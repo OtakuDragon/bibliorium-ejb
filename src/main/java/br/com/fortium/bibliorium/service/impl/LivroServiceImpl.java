@@ -31,8 +31,8 @@ public class LivroServiceImpl extends ServiceImpl implements LivroService {
 	}
 
 	@Override
-	public void update(Livro livro) {
-		livroEAO.update(livro);
+	public Livro update(Livro livro) {
+		return livroEAO.update(livro);
 	}
 
 	@Override

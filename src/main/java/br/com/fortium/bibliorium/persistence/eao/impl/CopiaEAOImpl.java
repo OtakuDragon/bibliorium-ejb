@@ -14,14 +14,14 @@ public class CopiaEAOImpl extends EAOImpl<Copia, Long> implements CopiaEAO {
 	}
 	
 	@Override
-	public Copia buscar(Long id) {
-		String jpql = "FROM Copia c WHERE c.id = ?1 AND c.estado != br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia.INATIVA ";
-		return buscarUm(jpql, new Object[]{id});
+	public Copia buscarCopia(Long idLivro, Long id) {
+		String jpql = "FROM Copia c WHERE c.livro.id = ?1 AND c.id = ?2  AND c.estado != br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia.INATIVA ";
+		return buscarUm(jpql, new Object[]{idLivro, id});
 	}
 	
 	@Override
 	public void desativarCopias(Livro livro) {
-		String jpql = "UPDATE Copia c SET c.estado = br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia.INATIVA WHERE  c.livro = ?1";
+		String jpql = "UPDATE Copia c SET c.estado = br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia.INATIVA WHERE c.livro = ?1";
 		update(jpql, new Object[]{livro});
 	}
 	

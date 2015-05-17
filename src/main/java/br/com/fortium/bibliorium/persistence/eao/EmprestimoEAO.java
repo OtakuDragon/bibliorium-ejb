@@ -9,7 +9,7 @@ import br.com.fortium.bibliorium.persistence.entity.Usuario;
 
 public interface EmprestimoEAO extends EAO<Emprestimo, Long> {
 	List<Emprestimo> buscar(Usuario usuario, Date periodo);
-	Long countEmprestimoAtivos(Usuario leitor);
+	Long countEmprestimoAtivos(Usuario usuario);
 	Emprestimo buscarReserva(Copia copia);
 	Emprestimo buscarEmprestimo(Copia copia);
 	Emprestimo buscarEmprestimo(Long id);

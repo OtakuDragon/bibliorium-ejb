@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.jboss.logging.Logger;
 
 import br.com.fortium.bibliorium.persistence.enumeration.TipoUsuario;
@@ -62,13 +61,13 @@ public class DataUtil {
 		int days = 0;
 		
 		if(dataFim.after(dataInicio)){
-			while(!DateUtils.isSameDay(dataInicio, dataFim)){
-				addDiasSemana(dataInicio, 1);
+			while(dataInicio.before(dataFim)){
+				dataInicio = addDiasSemana(dataInicio, 1);
 				days++;
 			}
 		}
 		
-		return days;
+		return days - 1;
 	}
 	
 	private static Date addDiasSemana(Date date, Integer qtd){

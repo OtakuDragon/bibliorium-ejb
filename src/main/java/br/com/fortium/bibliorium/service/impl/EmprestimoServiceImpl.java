@@ -1,5 +1,7 @@
 package br.com.fortium.bibliorium.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -61,12 +63,12 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 	}
 
 	@Override
-	public Long countEmprestimoAtivos(Usuario leitor) {
-		if(leitor == null){
-			throw new IllegalArgumentException("O leitor não pode ser nulo");
+	public Long countEmprestimoAtivos(Usuario usuario) {
+		if(usuario == null){
+			throw new IllegalArgumentException("O usuario não pode ser nulo");
 		}
 		
-		return emprestimoEAO.countEmprestimoAtivos(leitor);
+		return emprestimoEAO.countEmprestimoAtivos(usuario);
 	}
 
 	@Override
@@ -159,7 +161,8 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 					}
 					break;
 				case DEVIDO:
-					emprestimoAtivo.incrementaMulta();
+					int numDias = DataUtil.getDiferencaEmDias(emprestimoAtivo.getDataPrevista(), new Date());
+					emprestimoAtivo.setValorMulta(Emprestimo.MULTA_DIARIA.multiply(new BigDecimal(numDias)).setScale(2, RoundingMode.HALF_UP));
 					break;
 				default:
 					break;
@@ -170,26 +173,26 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 	}
 
 	private void validarEmprestimo(Emprestimo emprestimo) throws ValidationException {
-		Usuario leitor = emprestimo.getUsuario();
+		Usuario usuario = emprestimo.getUsuario();
 		
 		if(emprestimo == null || emprestimo.getCopia() == null){
 			throw new IllegalArgumentException("O emprestimo inválido, ele ou a copia estão nulos");
-		} else if(leitor.getEstado() == EstadoUsuario.INADIMPLENTE){
-			throw new ValidationException("Empréstimo/Reserva recusado(a), este leitor está inadimplente");
-		}else if(countEmprestimoAtivos(leitor) >= 5){
-			throw new ValidationException("Empréstimo/Reserva recusado(a), este leitor já atingiu o limite de 5 empréstimo/reserva ativos");
+		} else if(usuario.getEstado() == EstadoUsuario.INADIMPLENTE){
+			throw new ValidationException("Empréstimo/Reserva recusado(a), este usuário está inadimplente");
+		}else if(countEmprestimoAtivos(usuario) >= 5){
+			throw new ValidationException("Empréstimo/Reserva recusado(a), este usuário já atingiu o limite de 5 empréstimo/reserva ativos");
 		}
 	}
 	
 	private void validarRenovacao(Emprestimo emprestimo) throws ValidationException{
-		Usuario leitor = emprestimo.getUsuario();
+		Usuario usuario = emprestimo.getUsuario();
 		
 		if(countEmprestimoAtivos(emprestimo.getUsuario()) >= 5){
-			throw new ValidationException("Empréstimo/Reserva recusado(a), este leitor já atingiu o limite de 5 empréstimo/reserva ativos");
+			throw new ValidationException("Empréstimo/Reserva recusado(a), este usuário já atingiu o limite de 5 empréstimo/reserva ativos");
 		}else if(emprestimo.getDataRenovacao() != null){
 			//TODO Fazer com que sejam 4 renovações e não uma.
 			throw new ValidationException("Este emprestimo ja foi renovado uma vez.");
-		}else if(leitor.getEstado() == EstadoUsuario.INADIMPLENTE){
+		}else if(usuario.getEstado() == EstadoUsuario.INADIMPLENTE){
 			throw new ValidationException("Usuário inadimplente");
 		}else if(emprestimo.getDataEmprestimo().after(emprestimo.getDataPrevista())){
 			throw new ValidationException("Emprestimo vencido");

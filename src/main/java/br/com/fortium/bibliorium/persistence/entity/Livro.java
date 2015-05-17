@@ -81,6 +81,15 @@ public class Livro implements Serializable, Cloneable {
 	@Column(name = "num_paginas", nullable = false)
 	private Integer numPaginas;
 	
+	@Column(name = "corredor", nullable = false)
+	private String corredor;
+	
+	@Column(name = "estante", nullable = false)
+	private String estante;
+	
+	@Column(name = "prateleira", nullable = false)
+	private String prateleira;
+	
 	public List<Copia> getCopiasDisponiveis(){
 		Collection<Copia> copiasDisponiveis = Collections2.filter(getCopias(), FiltroCopia.DISPONIVEL);
 		return new ArrayList<Copia>(copiasDisponiveis);
@@ -176,6 +185,31 @@ public class Livro implements Serializable, Cloneable {
 		this.copias = copias;
 	}
 
+
+	public String getCorredor() {
+		return corredor;
+	}
+
+	public void setCorredor(String corredor) {
+		this.corredor = corredor;
+	}
+
+	public String getEstante() {
+		return estante;
+	}
+
+	public void setEstante(String estante) {
+		this.estante = estante;
+	}
+
+	public String getPrateleira() {
+		return prateleira;
+	}
+
+	public void setPrateleira(String prateleira) {
+		this.prateleira = prateleira;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -185,76 +219,125 @@ public class Livro implements Serializable, Cloneable {
 				+ ((categoria == null) ? 0 : categoria.hashCode());
 		result = prime * result + ((copias == null) ? 0 : copias.hashCode());
 		result = prime * result
+				+ ((corredor == null) ? 0 : corredor.hashCode());
+		result = prime * result
 				+ ((dataCadastro == null) ? 0 : dataCadastro.hashCode());
 		result = prime * result + ((edicao == null) ? 0 : edicao.hashCode());
 		result = prime * result + ((editora == null) ? 0 : editora.hashCode());
+		result = prime * result + ((estante == null) ? 0 : estante.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
 		result = prime * result
 				+ ((numPaginas == null) ? 0 : numPaginas.hashCode());
+		result = prime * result
+				+ ((prateleira == null) ? 0 : prateleira.hashCode());
 		result = prime * result + ((titulo == null) ? 0 : titulo.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Livro other = (Livro) obj;
 		if (autores == null) {
-			if (other.autores != null)
+			if (other.autores != null) {
 				return false;
-		} else if (!autores.equals(other.autores))
+			}
+		} else if (!autores.equals(other.autores)) {
 			return false;
+		}
 		if (categoria == null) {
-			if (other.categoria != null)
+			if (other.categoria != null) {
 				return false;
-		} else if (!categoria.equals(other.categoria))
+			}
+		} else if (!categoria.equals(other.categoria)) {
 			return false;
+		}
 		if (copias == null) {
-			if (other.copias != null)
+			if (other.copias != null) {
 				return false;
-		} else if (!copias.equals(other.copias))
+			}
+		} else if (!copias.equals(other.copias)) {
 			return false;
+		}
+		if (corredor == null) {
+			if (other.corredor != null) {
+				return false;
+			}
+		} else if (!corredor.equals(other.corredor)) {
+			return false;
+		}
 		if (dataCadastro == null) {
-			if (other.dataCadastro != null)
+			if (other.dataCadastro != null) {
 				return false;
-		} else if (!dataCadastro.equals(other.dataCadastro))
+			}
+		} else if (!dataCadastro.equals(other.dataCadastro)) {
 			return false;
+		}
 		if (edicao == null) {
-			if (other.edicao != null)
+			if (other.edicao != null) {
 				return false;
-		} else if (!edicao.equals(other.edicao))
+			}
+		} else if (!edicao.equals(other.edicao)) {
 			return false;
+		}
 		if (editora == null) {
-			if (other.editora != null)
+			if (other.editora != null) {
 				return false;
-		} else if (!editora.equals(other.editora))
+			}
+		} else if (!editora.equals(other.editora)) {
 			return false;
+		}
+		if (estante == null) {
+			if (other.estante != null) {
+				return false;
+			}
+		} else if (!estante.equals(other.estante)) {
+			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (isbn == null) {
-			if (other.isbn != null)
+			if (other.isbn != null) {
 				return false;
-		} else if (!isbn.equals(other.isbn))
+			}
+		} else if (!isbn.equals(other.isbn)) {
 			return false;
+		}
 		if (numPaginas == null) {
-			if (other.numPaginas != null)
+			if (other.numPaginas != null) {
 				return false;
-		} else if (!numPaginas.equals(other.numPaginas))
+			}
+		} else if (!numPaginas.equals(other.numPaginas)) {
 			return false;
+		}
+		if (prateleira == null) {
+			if (other.prateleira != null) {
+				return false;
+			}
+		} else if (!prateleira.equals(other.prateleira)) {
+			return false;
+		}
 		if (titulo == null) {
-			if (other.titulo != null)
+			if (other.titulo != null) {
 				return false;
-		} else if (!titulo.equals(other.titulo))
+			}
+		} else if (!titulo.equals(other.titulo)) {
 			return false;
+		}
 		return true;
 	}
 }

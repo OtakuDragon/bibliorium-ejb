@@ -6,17 +6,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import br.com.fortium.bibliorium.persistence.enumeration.EstadoCopia;
 
 @Entity
+@IdClass(CopiaId.class)
 @Table(schema="bibliorium", name = "copia")
 public class Copia implements Serializable {
 	
@@ -30,11 +29,10 @@ public class Copia implements Serializable {
 	}
 
 	@Id
-	@SequenceGenerator(name="copiaIdSEQ", sequenceName="id_copia_seq",initialValue = 1 , allocationSize = 1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="copiaIdSEQ")
 	@Column(name = "id_copia")
 	private Long id;
 	
+	@Id
 	@ManyToOne
 	@JoinColumn(name="id_livro", nullable = false) 
 	private Livro livro;
@@ -52,6 +50,9 @@ public class Copia implements Serializable {
 	}
 
 	public Livro getLivro() {
+		if(livro != null){
+			livro.setCopias(null);
+		}
 		return livro;
 	}
 

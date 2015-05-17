@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -55,7 +56,10 @@ public class Emprestimo implements Serializable {
 	private Usuario usuario;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
-	@JoinColumn(name="id_copia", nullable = false)
+	@JoinColumns({
+		@JoinColumn(name="id_livro",referencedColumnName="id_livro", nullable = false),
+		@JoinColumn(name="id_copia", referencedColumnName="id_copia", nullable = false)
+	})
 	private Copia copia;
 	
 	@Column(name = "data_emprestimo", nullable = false)
