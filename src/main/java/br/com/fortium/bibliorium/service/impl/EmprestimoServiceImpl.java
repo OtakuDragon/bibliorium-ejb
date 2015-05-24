@@ -116,7 +116,9 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 
 	@Override
 	public void concluirEmprestimo(Emprestimo emprestimo) {
-		emprestimo.setDataFechamento(new Date());
+		if(emprestimo.getEstado() != EstadoEmprestimo.DEVIDO){
+			emprestimo.setDataFechamento(new Date());
+		}
 		emprestimo.getCopia().setEstado(EstadoCopia.DISPONIVEL);
 		emprestimo.setCopia(copiaService.attachLivro(emprestimo.getCopia()));
 		

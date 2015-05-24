@@ -90,7 +90,7 @@ public class Emprestimo implements Serializable {
 	private Date dataRenovacao;
 
 	public Boolean isAberto(){
-		return getEstado() == EstadoEmprestimo.ABERTO;
+		return getEstado() != EstadoEmprestimo.FINALIZADO ;
 	}
 	
 	public void incrementaMulta(){
