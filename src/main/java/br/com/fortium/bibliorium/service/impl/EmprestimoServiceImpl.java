@@ -129,6 +129,7 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 	public void liquidarMulta(Emprestimo emprestimo) {
 		emprestimo.setDataFechamento(new Date());
 		emprestimo.setEstado(EstadoEmprestimo.FINALIZADO);
+		copiaService.attachLivro(emprestimo.getCopia());
 		
 		emprestimoEAO.update(emprestimo);
 	}
