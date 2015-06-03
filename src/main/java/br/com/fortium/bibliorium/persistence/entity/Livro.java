@@ -3,6 +3,7 @@ package br.com.fortium.bibliorium.persistence.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -91,8 +92,11 @@ public class Livro implements Serializable, Cloneable {
 	private String prateleira;
 	
 	public List<Copia> getCopiasDisponiveis(){
-		Collection<Copia> copiasDisponiveis = Collections2.filter(getCopias(), FiltroCopia.DISPONIVEL);
-		return new ArrayList<Copia>(copiasDisponiveis);
+		if(getCopias() != null){
+			Collection<Copia> copiasDisponiveis = Collections2.filter(getCopias(), FiltroCopia.DISPONIVEL);
+			return new ArrayList<Copia>(copiasDisponiveis);
+		}
+		return Collections.emptyList();
 	}
 	
 	public List<Copia> getCopiasIndisponiveis(){
