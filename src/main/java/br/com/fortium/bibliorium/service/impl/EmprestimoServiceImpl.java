@@ -192,9 +192,7 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 	private void validarRenovacao(Emprestimo emprestimo) throws ValidationException{
 		Usuario usuario = emprestimo.getUsuario();
 		
-		if(countEmprestimoAtivos(emprestimo.getUsuario()) >= 5){
-			throw new ValidationException("Empréstimo/Reserva recusado(a), este usuário já atingiu o limite de 5 empréstimo/reserva ativos");
-		}else if(emprestimo.getDataRenovacao() != null){
+		if(emprestimo.getDataRenovacao() != null){
 			//TODO Fazer com que sejam 4 renovações e não uma.
 			throw new ValidationException("Este emprestimo ja foi renovado uma vez.");
 		}else if(usuario.getEstado() == EstadoUsuario.INADIMPLENTE){
